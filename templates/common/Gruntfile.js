@@ -150,7 +150,19 @@ module.exports = function (grunt) {
         }]
       }
     },
-
+     injector: {
+                options: {
+                transform: function (filePath) {
+                filePath = filePath.replace('/app/', '');
+                return '<script src="' + filePath + '"></script>';
+                }
+            },
+            scripts: {
+                files: {
+                '<%= yeoman.app %>/index.html': ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js']
+                }
+            }
+            },
     // Automatically inject Bower components into the app
     wiredep: {
       app: {
@@ -504,7 +516,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', function (target) {
     if (target === 'compress') {
-      return grunt.task.run(['compress', 'ionic:serve']);
+      return grunt.task.run(['compress', 'ionic:serve');
     }
 
     grunt.config('concurrent.ionic.tasks', ['ionic:serve', 'watch']);
@@ -526,6 +538,7 @@ module.exports = function (grunt) {
     'clean',
     'ngconstant:development',
     'wiredep',
+    'injector:scripts',
     'concurrent:server',
     'autoprefixer',
     'newer:copy:app',
@@ -537,6 +550,7 @@ module.exports = function (grunt) {
     'clean',
     'ngconstant:production',
     'wiredep',
+    'injector:scripts',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
